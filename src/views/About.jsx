@@ -9,7 +9,7 @@ export default function About(){
         <div>
           <h1 className="text-5xl font-bold">About Page!</h1>
           <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-          <Link className='btn btn-primary'>List of games</Link>
+          <Link to='/games' className='btn btn-primary'>List of games</Link>
         </div>
       </div>
     </div>
