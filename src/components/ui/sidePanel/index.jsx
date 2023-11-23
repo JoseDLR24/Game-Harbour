@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function SidePanel({ onFilterChange }) {
+export default function SidePanel() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const queryParams = new URLSearchParams(location.search);
+  const initialFilters = queryParams.getAll('category');
+  const [selectedFilters, setSelectedFilters] = useState(initialFilters);
+
   const categories = ['action', 'battle-royale', 'fantasy', 'fighting', 'horror', 'moba', 'racing', 'shooter', 'sports', 'strategy', 'survival', 'mmo', 'anime', 'sci-fi'];
-  const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const handleCheckboxChange = (category) => {
-    const updatedCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter((c) => c !== category)
-      : [...selectedCategories, category];
-
-    setSelectedCategories(updatedCategories);
+  const handleFilterChange = (category) => {
+    const updatedFilters = selectedFilters.includes(category)
+      ? selectedFilters.filter((filter) => filter !== category)
+      : [...selectedFilters, category];
+    setSelectedFilters(updatedFilters);
   };
 
-  const handleResetFilters = () => {
-    setSelectedCategories([]);
+  const applyFilters = () => {
+    const query = selectedFilters.length > 0 ? `?category=${selectedFilters.join('&category=')}` : '';
+    navigate(`/games${query}`);
   };
 
-  const handleApplyFilters = () => {
-    // Call the onFilterChange prop to pass the selected categories to the parent component (Games.jsx)
-    if (onFilterChange) {
-      onFilterChange(selectedCategories);
-    }
+  const resetFilters = () => {
+    setSelectedFilters([]);
+    navigate('/games'); 
   };
 
   return (
@@ -39,17 +44,17 @@ export default function SidePanel({ onFilterChange }) {
                   id={category}
                   name={category}
                   value={category}
-                  checked={selectedCategories.includes(category)}
-                  onChange={() => handleCheckboxChange(category)}
+                  checked={selectedFilters.includes(category)}
+                  onChange={() => handleFilterChange(category)}
                 />
                 <label htmlFor={category}>{category}</label>
               </div>
             </li>
           ))}
-          <button className="btn btn-outline mt-4" onClick={handleResetFilters}>
+          <button className="btn btn-outline mt-4" onClick={resetFilters}>
             Reset Filters
           </button>
-          <button className="btn btn-primary mt-4" onClick={handleApplyFilters}>
+          <button className="btn btn-primary mt-4" onClick={applyFilters}>
             Apply Filters
           </button>
         </ul>
